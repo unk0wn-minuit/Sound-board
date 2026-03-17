@@ -3,7 +3,7 @@ document.getElementById("volSlider").addEventListener("input", e => {
   const v = parseInt(e.target.value);
   document.getElementById("volPct").textContent = v + "%";
   document.getElementById("volPct").style.color = v > 100 ? "#ff6b6b" : "#a76cff";
-  // apply to your AudioContext gainNode: gainNode.gain.value = v / 100;
+
 });
 
 // Overdrive button
