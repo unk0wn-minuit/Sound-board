@@ -1,304 +1,42 @@
-<h3>Welcome to the real-time HTML editor!</h3>
-<p>Type HTML in the textarea above, and it will magically appear in the frame below.</p><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="https://cdn.jsdelivr.net/gh/genizy/soundboard@main/">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5521219086088837" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Soundboard Elite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --accent-color: #7c3aed;
-            --accent-glow: rgba(124, 58, 237, 0.5);
-            --text-color: #f8fafc;
-            --danger: #ef4444;
-            --star-color: #fbbf24;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-
-        body {
-            background-color: var(--bg-color);
-            background-image: radial-gradient(circle at top right, #1e1b4b, transparent), 
-                              radial-gradient(circle at bottom left, #1e1b4b, transparent);
-            color: var(--text-color);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        /* Header & Controls */
-        header {
-            max-width: 1200px;
-            margin: 0 auto 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        h1 { font-weight: 800; font-size: 2rem; letter-spacing: -1px; }
-        h1 span { color: var(--accent-color); }
-
-        .controls-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        /* Input Styles */
-        #searchInput {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 12px 20px;
-            border-radius: 12px;
-            color: white;
-            width: 300px;
-            outline: none;
-            transition: 0.3s;
-        }
-        #searchInput:focus { border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-glow); }
-
-        /* Button Styles */
-        .btn {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            padding: 10px 18px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.2s;
-        }
-        .btn:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
-        .btn.active { background: var(--accent-color); border-color: var(--accent-color); }
-        .btn-stop { background: var(--danger); border: none; }
-        .btn-stop:hover { background: #dc2626; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
-
-        /* Volume Slider */
-        .volume-container { display: flex; align-items: center; gap: 10px; background: var(--card-bg); padding: 5px 15px; border-radius: 10px; }
-        input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
-
-        /* Soundboard Grid */
-        #soundboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Sound Card */
-        .sound-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 18px;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            user-select: none;
-        }
-
-        .sound-card:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.2);
-            transform: scale(1.05);
-        }
-
-        .sound-card.playing {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 20px var(--accent-glow);
-            animation: pulse 1.5s infinite;
-        }
-
-        .sound-name { font-weight: 600; font-size: 0.95rem; }
-        
-        .fav-star {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: rgba(255,255,255,0.2);
-            font-size: 1.2rem;
-            transition: 0.2s;
-        }
-        .fav-star.active { color: var(--star-color); text-shadow: 0 0 10px var(--star-color); }
-        
-        .category-tag {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            opacity: 0.5;
-            letter-spacing: 1px;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1.05); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1.05); }
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            #searchInput { width: 100%; }
-            .top-bar { justify-content: center; }
-        }
-    </style>
+    <title>Coola Mattespel Soundboard</title>
+    <script src="sounds.js" type="module"></script>
+    <script src="main.js" type="module"></script>
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
+    <div class="app">
+        <div class="header">
+            <h1>Soundboard</h1>
+            <p>Coola Mattespel</p>
+        </div>
 
-    <header>
-        <div class="top-bar">
-            <h1>Elite<span>Sounds</span></h1>
-            <div class="volume-container">
-                <span>🔊</span>
-                <input type="range" id="masterVolume" min="0" max="1" step="0.1" value="0.7">
+        <div id="controls">
+            <div class="search-wrap">
+                <span class="search-icon"></span>
+                <input id="searchInput" type="text" placeholder="Search sounds…">
             </div>
+            <button id="toggleFavorites" class="ctrl-btn favorites-toggle">
+                ★ Favorites <span class="badge" id="favCount">0</span>
+            </button>
+            <button id="toggleButton" class="ctrl-btn overlap-toggle">
+                <span class="dot"></span> Overlap
+            </button>
+            <button id="stopButton" class="ctrl-btn stop-btn">
+                ■ Stop all
+            </button>
         </div>
 
-        <div class="controls-group">
-            <input id="searchInput" type="text" placeholder="Search for sounds (e.g. 'Bonk')...">
-            <button id="toggleFavorites" class="btn">⭐ Favorites: OFF</button>
-            <button id="toggleOverlap" class="btn">🔀 Overlap: ON</button>
-            <button id="stopButton" class="btn btn-stop">⏹️ Stop All</button>
-        </div>
-    </header>
-
-    <div id="soundboard"></div>
-
-    <script>
-        // Configuration: Add your sounds here
-        const sounds = [
-            { id: 1, name: "Airhorn", file: "https://www.myinstants.com/media/sounds/mlg-air-horn.mp3", category: "Meme" },
-            { id: 2, name: "Bonk", file: "https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3", category: "FX" },
-            { id: 3, name: "Notification", file: "https://www.myinstants.com/media/sounds/discord-notification.mp3", category: "App" },
-            { id: 4, name: "Bruh", file: "https://www.myinstants.com/media/sounds/bruh.mp3", category: "Meme" },
-            { id: 5, name: "Victory", file: "https://www.myinstants.com/media/sounds/final-fantasy-vii-victory-fanfare-1.mp3", category: "Game" },
-            { id: 6, name: "Error", file: "https://www.myinstants.com/media/sounds/windows-xp-error.mp3", category: "System" },
-            // Add as many as you want...
-        ];
-
-        let favorites = JSON.parse(localStorage.getItem('favs')) || [];
-        let isOverlapEnabled = true;
-        let showOnlyFavs = false;
-        let activeAudios = [];
-
-        const board = document.getElementById('soundboard');
-        const searchInput = document.getElementById('searchInput');
-        const masterVolume = document.getElementById('masterVolume');
-
-        function init() {
-            renderSounds(sounds);
-            
-            // Search Event
-            searchInput.addEventListener('input', (e) => {
-                const term = e.target.value.toLowerCase();
-                const filtered = sounds.filter(s => s.name.toLowerCase().includes(term));
-                renderSounds(filtered);
-            });
-
-            // Overlap Toggle
-            document.getElementById('toggleOverlap').addEventListener('click', (e) => {
-                isOverlapEnabled = !isOverlapEnabled;
-                e.target.classList.toggle('active');
-                e.target.innerText = isOverlapEnabled ? "🔀 Overlap: ON" : "🚫 Overlap: OFF";
-            });
-
-            // Stop All
-            document.getElementById('stopButton').addEventListener('click', stopAll);
-
-            // Favorites Filter Toggle
-            document.getElementById('toggleFavorites').addEventListener('click', (e) => {
-                showOnlyFavs = !showOnlyFavs;
-                e.target.classList.toggle('active');
-                renderSounds(sounds);
-            });
-        }
-
-        function renderSounds(soundList) {
-            board.innerHTML = '';
-            
-            let displayList = soundList;
-            if (showOnlyFavs) {
-                displayList = soundList.filter(s => favorites.includes(s.id));
-            }
-
-            displayList.forEach(sound => {
-                const isFav = favorites.includes(sound.id);
-                const card = document.createElement('div');
-                card.className = 'sound-card';
-                card.innerHTML = `
-                    <span class="fav-star ${isFav ? 'active' : ''}" data-id="${sound.id}">★</span>
-                    <span class="category-tag">${sound.category}</span>
-                    <span class="sound-name">${sound.name}</span>
-                `;
-
-                // Play Sound on Click
-                card.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('fav-star')) {
-                        toggleFav(sound.id);
-                        return;
-                    }
-                    playSound(sound.file, card);
-                });
-
-                board.appendChild(card);
-            });
-        }
-
-        function playSound(file, card) {
-            if (!isOverlapEnabled) stopAll();
-
-            const audio = new Audio(file);
-            audio.volume = masterVolume.value;
-            activeAudios.push(audio);
-            
-            card.classList.add('playing');
-            audio.play();
-
-            audio.onended = () => {
-                card.classList.remove('playing');
-                activeAudios = activeAudios.filter(a => a !== audio);
-            };
-        }
-
-        function stopAll() {
-            activeAudios.forEach(a => {
-                a.pause();
-                a.currentTime = 0;
-            });
-            activeAudios = [];
-            document.querySelectorAll('.sound-card').forEach(c => c.classList.remove('playing'));
-        }
-
-        function toggleFav(id) {
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(favId => favId !== id);
-            } else {
-                favorites.push(id);
-            }
-            localStorage.setItem('favs', JSON.stringify(favorites));
-            renderSounds(sounds);
-        }
-
-        init();
-    </script>
+        <div class="section-label" id="sectionLabel">All sounds</div>
+        <div id="soundboard"></div>
+    </div>
 </body>
 </html>
