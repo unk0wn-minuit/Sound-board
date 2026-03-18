@@ -9058,7 +9058,9 @@ function renderSounds() {
                                      document.querySelectorAll('.wave-bar').forEach(b => b.classList.remove('active'));
                            }
 
-                                              const audio = new Audio(CDN + sound.mp3);
+                                              const audio = new Audio();
+                           audio.crossOrigin = 'anonymous';
+                           audio.src = CDN + sound.mp3;
                            const gain = globalVolume;
 
                                               if (gain <= 1) {
