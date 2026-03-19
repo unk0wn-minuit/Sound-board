@@ -9237,22 +9237,59 @@ function renderUserSounds(sounds){
   if(existing)existing.remove();
   var sec=document.createElement('div');
   sec.id='userSoundsSection';
-  sec.style.cssText='width:100%;margin-top:20px';
   var label=document.createElement('div');
   label.className='section-label';
-  label.style.cssText='margin-bottom:10px';
+  label.style.marginTop='24px';
   label.textContent='👥 Uppladdade av användare';
   sec.appendChild(label);
   var wrap=document.createElement('div');
   wrap.className='sb-grid';
   sounds.forEach(function(s){
-    var colors=['#7b2cff','#a855f7','#6366f1','#8b5cf6','#ec4899','#06b6d4'];
+    var colors=['rgb(123,44,255)','rgb(168,85,247)','rgb(99,102,241)','rgb(139,92,246)','rgb(236,72,153)','rgb(6,182,212)'];
     var color=colors[Math.abs(s.name.charCodeAt(0))%colors.length];
     var btn=document.createElement('button');
-    btn.className='sb-btn';
-    btn.style.setProperty('--c',color);
-    btn.innerHTML='<span class="sb-label">'+s.name+'</span>'+(s.author&&s.author!=='Anonym'?'<span style="font-size:9px;opacity:.6;display:block;margin-top:2px">av '+s.author+'</span>':'');
-    btn.addEventListener('click',function(){playSound(s.url,btn);});
+    btn.className='sound-btn';
+    btn.style.setProperty('--btn-color',color);
+    var authorTag=s.author&&s.author!=='Anonym'?'<div style="font-size:9px;opacity:.55;margin-top:3px">av '+s.author+'</div>':'';
+    btn.innerHTML='<div class="sound-label">'+s.name+authorTag+'</div><div class="prog-bar"><div class="prog-fill"></div></div>';
+    btn.addEventListener('click',function(e){
+      if(!allowOverlap){
+        currentAudios.forEach(function(a){a.pause();a.currentTime=0;});
+        currentAudios=[];
+        document.querySelectorAll('.sound-btn.playing').forEach(function(b){b.classList.remove('playing');});
+        document.querySelectorAll('.wave-bar').forEach(function(b){b.classList.remove('active');});
+      }
+      var audio=new Audio();
+      audio.src=s.url;
+      var gain=globalVolume;
+      if(gain<=1){audio.volume=gain;audio.play();}
+      else{
+        var ctx=getAudioCtx();
+        ctx.resume().then(function(){
+          var source=ctx.createMediaElementSource(audio);
+          var gainNode=ctx.createGain();
+          gainNode.gain.value=gain;
+          source.connect(gainNode);
+          gainNode.connect(ctx.destination);
+          audio.play();
+        });
+      }
+      currentAudios.push(audio);
+      btn.classList.add('playing');
+      document.querySelectorAll('.wave-bar').forEach(function(b){b.classList.add('active');});
+      var fill=btn.querySelector('.prog-fill');
+      audio.addEventListener('timeupdate',function(){if(audio.duration)fill.style.width=(audio.currentTime/audio.duration*100)+'%';});
+      audio.addEventListener('ended',function(){
+        btn.classList.remove('playing');
+        fill.style.width='0%';
+        currentAudios=currentAudios.filter(function(a){return a!==audio;});
+        if(currentAudios.length===0)document.querySelectorAll('.wave-bar').forEach(function(b){b.classList.remove('active');});
+      });
+      var ripple=document.createElement('div');
+      ripple.className='ripple-ring';
+      btn.appendChild(ripple);
+      setTimeout(function(){ripple.remove();},500);
+    });
     wrap.appendChild(btn);
   });
   sec.appendChild(wrap);
