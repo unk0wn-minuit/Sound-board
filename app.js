@@ -9260,6 +9260,7 @@ function renderUserSounds(sounds){
         document.querySelectorAll('.wave-bar').forEach(function(b){b.classList.remove('active');});
       }
       var audio=new Audio();
+      audio.crossOrigin='anonymous';
       audio.src=s.url;
       var gain=globalVolume;
       if(gain<=1){audio.volume=gain;audio.play();}
