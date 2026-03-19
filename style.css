@@ -305,3 +305,6 @@ body {
   .section-label { padding: 4px 16px 8px; }
   #soundboard { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; padding: 0 16px 24px; }
 }
+
+.upload-btn { background: linear-gradient(135deg, rgba(123,44,255,.3), rgba(168,85,247,.3)) !important; border: 1px solid rgba(123,44,255,.5) !important; color: #a855f7 !important; }
+.upload-btn:hover { background: linear-gradient(135deg, rgba(123,44,255,.5), rgba(168,85,247,.5)) !important; }

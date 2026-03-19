@@ -12,79 +12,42 @@
 <body>
   <div class="sb-app">
     <div class="scanline"></div>
-
-    <div id="loader">
-      <div class="load-dots">
-        <div class="load-dot"></div>
-        <div class="load-dot"></div>
-        <div class="load-dot"></div>
-      </div>
-      <div class="loader-logo">Jakob so spel</div>
-      <div class="loader-sub">Soundboard</div>
-      <div class="load-track"><div class="load-bar" id="loadBar"></div></div>
-      <div class="load-pct" id="loadPct">Laddar...</div>
-    </div>
-
+    <div id="loader">...</div>
     <div id="main">
-      <header class="sb-header">
-        <div class="brand">
-          <div class="brand-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-            </svg>
-          </div>
-          <div>
-            <div class="sb-title">Jakob so spel</div>
-            <div class="sb-subtitle">Soundboard</div>
-          </div>
-        </div>
-        <div class="wave-bars" id="waveBars">
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
-          <div class="wave-bar"></div>
-        </div>
-      </header>
-
+      <header class="sb-header">...</header>
       <div id="controls">
-        <div class="search-wrap">
-          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-          <input id="searchInput" type="text" placeholder="Sok ljud...">
-        </div>
-        <button id="toggleFavorites" class="ctrl-btn favorites-toggle">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          Favoriter <span class="badge" id="favCount">0</span>
-        </button>
-        <button id="toggleButton" class="ctrl-btn overlap-toggle">
-          <span class="dot"></span> Overlap
-        </button>
-        <button id="stopButton" class="ctrl-btn stop-btn">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-          Stoppa allt
-        </button>
+        <div class="search-wrap">...</div>
+        <button id="toggleFavorites">Favoriter</button>
+        <button id="toggleButton">Overlap</button>
+        <button id="stopButton">Stoppa allt</button>
+        <button id="uploadBtn" class="ctrl-btn upload-btn">⬆ Ladda upp ljud</button>
       </div>
-
-      <div class="vol-strip">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="vol-icon">
-          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-        </svg>
-        <span class="vol-label-text">Volym</span>
-        <input type="range" class="vol-slider" id="volSlider" min="0" max="100" step="1" value="80">
-        <div class="vol-pct" id="volPct">80%</div>
-        <button class="ctrl-btn danger-btn" id="overdriveBtn">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          400% <span class="od-badge">MAX</span>
-        </button>
-      </div>
-
+      <div class="vol-strip">...</div>
       <div class="section-label" id="sectionLabel">Alla ljud</div>
       <div id="soundboard"></div>
     </div>
   </div>
+
+  <div id="uploadModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#1a1a2e;border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:28px;width:min(420px,92vw);max-height:90vh;overflow-y:auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <h3 style="margin:0;color:#fff;font-size:16px">⬆ Ladda upp ljud</h3>
+        <button onclick="closeUploadModal()" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer">✕</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <input type="text" id="uploadName" placeholder="Namn på ljudet..." style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;color:#fff;font-size:14px;outline:none;font-family:inherit">
+        <input type="text" id="uploadAuthor" placeholder="Ditt namn (valfritt)..." style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;color:#fff;font-size:14px;outline:none;font-family:inherit">
+        <label style="background:rgba(255,255,255,.08);border:1px dashed rgba(255,255,255,.3);border-radius:8px;padding:20px;text-align:center;cursor:pointer;color:rgba(255,255,255,.7);font-size:13px">
+          <span id="fileLabel">📁 Välj ljudfil (MP3, WAV, OGG)</span>
+          <input type="file" id="uploadFile" accept=".mp3,.wav,.ogg,.m4a" style="display:none" onchange="updateFileLabel(this)">
+        </label>
+        <div id="uploadStatus" style="font-size:12px;color:rgba(255,255,255,.5);min-height:18px;text-align:center"></div>
+        <button onclick="submitUpload()" id="uploadSubmitBtn" style="background:linear-gradient(135deg,#7b2cff,#a855f7);border:none;border-radius:8px;padding:12px;color:#fff;font-size:14px;font-weight:600;cursor:pointer">Ladda upp</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 </html>

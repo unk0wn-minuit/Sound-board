@@ -1,3 +1,8 @@
+// Supabase
+const _SB_URL = "https://vqntfjxscvgzjrydopje.supabase.co";
+const _SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxbnRmanhzY3ZnempyeWRvcGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3NDE4NTAsImV4cCI6MjA4OTMxNzg1MH0.0ZIkeqI6Y_KNapIL5os7xprtN0BJJsQiVCXLV6oHGWI";
+let _sb = null;
+
 // ── Sound data (from cdn.jsdelivr.net/gh/genizy/soundboard@main) ──
 const CDN = 'https://cdn.jsdelivr.net/gh/genizy/soundboard@main';
 
@@ -9163,4 +9168,93 @@ window.addEventListener('load', () => {
                   document.getElementById('main').classList.add('visible');
           }, 520);
     }, 800);
+
+    try{_sb=supabase.createClient(_SB_URL,_SB_KEY);}catch(e){}
+    fetchUserSounds();
+    var ubtn=document.getElementById('uploadBtn');if(ubtn)ubtn.addEventListener('click',openUploadModal);
 });
+
+
+// ── Upload modal ──
+function openUploadModal(){
+  var m=document.getElementById('uploadModal');
+  if(m){m.style.display='flex';}
+}
+function closeUploadModal(){
+  var m=document.getElementById('uploadModal');
+  if(m){m.style.display='none';}
+  document.getElementById('uploadName').value='';
+  document.getElementById('uploadAuthor').value='';
+  document.getElementById('uploadFile').value='';
+  document.getElementById('fileLabel').textContent='📁 Välj ljudfil (MP3, WAV, OGG)';
+  document.getElementById('uploadStatus').textContent='';
+}
+function updateFileLabel(input){
+  var lbl=document.getElementById('fileLabel');
+  if(input.files&&input.files[0]){lbl.textContent='✅ '+input.files[0].name;}
+  else{lbl.textContent='📁 Välj ljudfil (MP3, WAV, OGG)';}
+}
+async function submitUpload(){
+  if(!_sb){setStatus('❌ Ingen databasanslutning');return;}
+  var name=document.getElementById('uploadName').value.trim();
+  var author=document.getElementById('uploadAuthor').value.trim()||'Anonym';
+  var file=document.getElementById('uploadFile').files[0];
+  if(!name){setStatus('⚠️ Ange ett namn');return;}
+  if(!file){setStatus('⚠️ Välj en fil');return;}
+  if(file.size>15*1024*1024){setStatus('❌ Filen är för stor (max 15MB)');return;}
+  var btn=document.getElementById('uploadSubmitBtn');
+  btn.disabled=true;btn.textContent='Laddar upp...';
+  setStatus('⏳ Laddar upp...');
+  try{
+    var ext=file.name.split('.').pop();
+    var path='sounds/'+Date.now()+'_'+Math.random().toString(36).slice(2)+'.'+ext;
+    var {data:upData,error:upErr}=await _sb.storage.from('soundboard').upload(path,file,{contentType:file.type,upsert:false});
+    if(upErr)throw upErr;
+    var {data:{publicUrl}}=_sb.storage.from('soundboard').getPublicUrl(path);
+    var {error:dbErr}=await _sb.from('soundboard_sounds').insert({name:name,url:publicUrl,author:author,created_at:new Date().toISOString()});
+    if(dbErr)throw dbErr;
+    setStatus('✅ Uppladdad!');
+    setTimeout(function(){closeUploadModal();fetchUserSounds();},1200);
+  }catch(e){
+    setStatus('❌ Fel: '+(e.message||'okänt fel'));
+  }
+  btn.disabled=false;btn.textContent='Ladda upp';
+}
+function setStatus(msg){var el=document.getElementById('uploadStatus');if(el)el.textContent=msg;}
+
+async function fetchUserSounds(){
+  if(!_sb)return;
+  try{
+    var {data,error}=await _sb.from('soundboard_sounds').select('*').order('created_at',{ascending:false}).limit(100);
+    if(error||!data||!data.length)return;
+    renderUserSounds(data);
+  }catch(e){}
+}
+function renderUserSounds(sounds){
+  var grid=document.getElementById('soundboard');
+  if(!grid)return;
+  var existing=document.getElementById('userSoundsSection');
+  if(existing)existing.remove();
+  var sec=document.createElement('div');
+  sec.id='userSoundsSection';
+  sec.style.cssText='width:100%;margin-top:20px';
+  var label=document.createElement('div');
+  label.className='section-label';
+  label.style.cssText='margin-bottom:10px';
+  label.textContent='👥 Uppladdade av användare';
+  sec.appendChild(label);
+  var wrap=document.createElement('div');
+  wrap.className='sb-grid';
+  sounds.forEach(function(s){
+    var colors=['#7b2cff','#a855f7','#6366f1','#8b5cf6','#ec4899','#06b6d4'];
+    var color=colors[Math.abs(s.name.charCodeAt(0))%colors.length];
+    var btn=document.createElement('button');
+    btn.className='sb-btn';
+    btn.style.setProperty('--c',color);
+    btn.innerHTML='<span class="sb-label">'+s.name+'</span>'+(s.author&&s.author!=='Anonym'?'<span style="font-size:9px;opacity:.6;display:block;margin-top:2px">av '+s.author+'</span>':'');
+    btn.addEventListener('click',function(){playSound(s.url,btn);});
+    wrap.appendChild(btn);
+  });
+  sec.appendChild(wrap);
+  grid.after(sec);
+}
